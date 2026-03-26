@@ -1,0 +1,1 @@
+for i in[0]*int(input()):input();a=[*map(int,input().split())];b=[y for x,y,z in zip([0]+a,a,a[1:]+[0])if 0>x|z<y]or[0];l=min(b);m=max([(max(b)-l+1)//2]+[abs(x-y)for x,y in zip(a,a[1:])if~x&~y]);print(m,l+m)

@@ -1,0 +1,33 @@
+from sys import setrecursionlimit
+setrecursionlimit(1000000)
+
+n = int(input())
+graph = [[] for _ in range(n + 1)]
+ci = [0]
+
+def solve(x):
+    rlt = []
+    for v in graph[x]:
+        rlt.extend(solve(v))
+    
+    if len(rlt) < ci[x]:
+        raise ValueError
+
+    rlt.insert(ci[x], x)
+    return rlt
+
+for i in range(1, n + 1):
+    p, c = map(int, input().split())
+    graph[p].append(i)
+    ci.append(c)
+#JSR
+try:
+    ans = solve(graph[0][0])
+except ValueError:
+    print("NO")
+else:
+    print("YES")
+    for i in range(1, n + 1):
+        print(ans.index(i) + 1, end=' ')
+
+		    			 	   		 				 				  	 	

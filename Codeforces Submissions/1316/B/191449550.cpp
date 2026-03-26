@@ -1,0 +1,76 @@
+#include<iostream>
+#include<cstring>
+#include<vector>
+#include<map>
+#include<queue>
+#include<unordered_map>
+#include<cmath>
+#include<cstdio>
+#include<algorithm>
+#include<set>
+#include<cstdlib>
+#include<stack>
+#include<ctime>
+#define forin(i,a,n) for(int i=a;i<=n;i++)
+#define forni(i,n,a) for(int i=n;i>=a;i--)
+#define fi first
+#define se second
+using namespace std;
+typedef long long ll;
+typedef double db;
+typedef pair<int,int> PII;
+const double eps=1e-7;
+const int N=6e5+7 ,M=2*N , INF=0x3f3f3f3f,mod=1e9+7;
+inline ll read() {ll x=0,f=1;char c=getchar();while(c<'0'||c>'9') {if(c=='-') f=-1;c=getchar();}
+while(c>='0'&&c<='9') {x=(ll)x*10+c-'0';c=getchar();} return x*f;}
+void stin() {freopen("in_put.txt","r",stdin);freopen("my_out_put.txt","w",stdout);}
+
+template<typename T> T gcd(T a,T b) {return b==0?a:gcd(b,a%b);}
+template<typename T> T lcm(T a,T b) {return a*b/gcd(a,b);}
+
+int T;
+int n,m,k;
+string str;
+
+void solve() {  
+    n=read();    
+    
+    cin>>str;
+    
+    int id=1;
+    string ans=str;
+    for(int i=2;i<=n;i++) {
+        if((n-i+1)%2==1) {
+            string p=str.substr(0,i-1);
+            reverse(p.begin(),p.end());
+            string k=str.substr(i-1,n-i+1)+p;
+            if(ans>k) {
+                ans=k;
+                id=i;
+            }
+            
+        }else {
+            string k=str.substr(i-1,n-i+1)+str.substr(0,i-1);
+            if(ans>k) {
+                ans=k;
+                id=i;
+            }
+        }
+    }
+    
+    cout<<ans<<'\n'<<id<<'\n';
+}
+
+int main() {
+
+    
+    scanf("%d",&T);
+
+
+
+    // T=1; 
+    while(T--) solve();
+    
+    return 0;       
+}          
+		   	 			 		  	 	    	 		 		

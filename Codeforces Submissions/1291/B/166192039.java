@@ -1,0 +1,421 @@
+
+import java.util.*;
+import java.io.*;
+
+public class Main {
+	static StringBuilder sb;
+	static dsu dsu;
+	static long fact[];
+	static int mod = (int) (1e9 + 7);
+static void build(int node, int start, int end,int[]tree,int[]arr) {
+      if (start == end) {
+        tree[node] = arr[start];
+      } else {
+        int mid = (start + end) / 2;
+        int left = node * 2;
+        int right = node * 2 + 1;
+        build(left, start, mid,tree,arr);
+        build(right, mid + 1, end,tree,arr);
+        tree[node] = Math.max(tree[left], tree[right]);
+      }
+    }
+    
+   static int query(int node, int start, int end, int l, int r,int[]tree,int[]arr) {
+      if (end < l || r < start)return Integer.MIN_VALUE;
+
+      if (start == end) {
+        return tree[node];
+      } else if (l <= start && end <= r) {
+        return tree[node];
+      } else {
+        int mid = (start + end) / 2;
+        int left = query(node * 2, start, mid, l, r,tree,arr);
+        int right = query(node * 2 + 1, mid + 1, end, l, r,tree,arr);
+
+        return Math.max(left, right);
+      }
+    }
+    static int get(int v,int k,int max){
+        int lo=1;
+        int hi=k;
+        int ans=-1;
+        while(lo<=hi){
+            int mid=(lo+hi)/2;
+            if(v/mid>max){
+                lo=mid+1;
+            }
+            else{
+                ans=mid;
+                hi=mid-1;
+            }
+            
+            
+            
+        }
+        return ans;
+    }
+    static long solve( ArrayList<Pair> ls,long time,long sx,long sy){
+        
+        long ans=0;
+        
+        for(int i=0;i<ls.size();i++){
+            Pair p=ls.get(i);
+            long stx=p.x;
+            long sty=p.y;
+            long temp=(Math.abs(sx-stx)+Math.abs(sy-sty));
+           
+        long cans=0;
+        if(temp<=time)cans++;
+        else continue;
+         
+        for(int j=i+1;j<ls.size();j++){
+            Pair p1=ls.get(j);
+    long temp1=(Math.abs(p1.x-stx)+Math.abs(p1.y-sty));
+    temp+=temp1;
+    // System.out.println(cans+" "+temp+" "+p1.x);
+    if(temp<=time)cans++;
+    else break;
+    
+            stx=p1.x;
+            sty=p1.y;
+        }
+        // System.out.println(time+" "+temp+" "+(time-temp));
+        ans=Math.max(ans,cans);
+        
+        
+        }
+        return ans;
+    }
+	static void solve(int cnt) {
+	    int n=i();
+	    int[]arr=new int[n];
+	    for(int i=0;i<n;i++)arr[i]=i();
+	    int[]ss=new int[n];
+	    for(int i=n-1;i>=0;i--){
+	        if(i==n-1)ss[i]=arr[i]-(n-1-i);
+	        else ss[i]=Math.min(ss[i+1],arr[i]-(n-1-i));
+	    }
+	    int t=0;
+	    for(int i=0;i<n;i++){
+	        t=Math.min(t,arr[i]-i);
+	       if(t>=0&&ss[i]>=0){
+	           sb.append("Yes\n");
+	           return;
+	       }
+	    }
+	    sb.append("No\n");
+	    
+	}
+	public static void main(String[] args) {
+		sb = new StringBuilder();
+		int test = i();
+			 fact=new long[(int)1e6+10];
+			 fact[0]=fact[1]=1; 
+			 for(int i=2;i<fact.length;i++)
+	 { fact[i]=((long)(i%mod)*(long)(fact[i-1]%mod))%mod; }
+	 int cnt=1;
+		while (test-- > 0) {
+			solve(cnt);
+			cnt++;
+		}
+		System.out.println(sb);
+
+	}
+
+	
+
+	 
+//**************NCR%P******************	 
+	static long ncr(int n, int r) {
+		if (r > n)
+			return (long) 0;
+
+		long res = fact[n] % mod;
+		// System.out.println(res);
+		res = ((long) (res % mod) * (long) (p(fact[r], mod - 2) % mod)) % mod;
+		res = ((long) (res % mod) * (long) (p(fact[n - r], mod - 2) % mod)) % mod;
+		// System.out.println(res);
+		return res;
+
+	}
+
+	static long p(long x, long y)// POWER FXN //
+	{
+		if (y == 0)
+			return 1;
+
+		long res = 1;
+		while (y > 0) {
+			if (y % 2 == 1) {
+				res = (res * x) ;
+				y--;
+			}
+
+			x = (x * x);
+			y = y / 2;
+
+		}
+		return res;
+	}
+
+//**************END******************
+
+	// *************Disjoint set
+	// union*********//
+	static class dsu {
+		int parent[];
+
+		dsu(int n) {
+			parent = new int[n];
+			for (int i = 0; i < n; i++)
+				parent[i] = i;
+		}
+
+		int find(int a) {
+			if (parent[a] ==a)
+				return a;
+			else {
+				int x = find(parent[a]);
+				parent[a] = x;
+				return x;
+			}
+		}
+
+		void merge(int a, int b) {
+			a = find(a);
+			b = find(b);
+			if (a == b)
+				return;
+			parent[b] = a;
+		}
+	}
+
+//**************PRIME FACTORIZE **********************************//
+	static TreeMap<Integer, Integer> prime(long n) {
+		TreeMap<Integer, Integer> h = new TreeMap<>();
+		long num = n;
+		for (int i = 2; i <= Math.sqrt(num); i++) {
+			if (n % i == 0) {
+				int nt = 0;
+				while (n % i == 0) {
+					n = n / i;
+					nt++;
+				}
+				h.put(i, nt);
+			}
+		}
+		if (n != 1)
+			h.put((int) n, 1);
+		return h;
+
+	}
+
+//****CLASS PAIR ************************************************
+	static class Pair implements Comparable<Pair> {
+		long x;
+		long y;
+
+		Pair(long x, long y) {
+			this.x = x;
+			this.y = y;
+		}
+
+		public int compareTo(Pair o) {
+			return (int) (this.y - o.y);
+
+		}
+
+	}
+//****CLASS PAIR **************************************************
+
+	static class InputReader {
+		private InputStream stream;
+		private byte[] buf = new byte[1024];
+		private int curChar;
+		private int numChars;
+		private SpaceCharFilter filter;
+
+		public InputReader(InputStream stream) {
+			this.stream = stream;
+		}
+
+		public int read() {
+			if (numChars == -1)
+				throw new InputMismatchException();
+			if (curChar >= numChars) {
+				curChar = 0;
+				try {
+					numChars = stream.read(buf);
+				} catch (IOException e) {
+					throw new InputMismatchException();
+				}
+				if (numChars <= 0)
+					return -1;
+			}
+			return buf[curChar++];
+		}
+
+		public int Int() {
+			int c = read();
+			while (isSpaceChar(c))
+				c = read();
+			int sgn = 1;
+			if (c == '-') {
+				sgn = -1;
+				c = read();
+			}
+			int res = 0;
+			do {
+				if (c < '0' || c > '9')
+					throw new InputMismatchException();
+				res *= 10;
+				res += c - '0';
+				c = read();
+			} while (!isSpaceChar(c));
+			return res * sgn;
+		}
+
+		public String String() {
+			int c = read();
+			while (isSpaceChar(c))
+				c = read();
+			StringBuilder res = new StringBuilder();
+			do {
+				res.appendCodePoint(c);
+				c = read();
+			} while (!isSpaceChar(c));
+			return res.toString();
+		}
+
+		public boolean isSpaceChar(int c) {
+			if (filter != null)
+				return filter.isSpaceChar(c);
+			return c == ' ' || c == '\n' || c == '\r' || c == '\t' || c == -1;
+		}
+
+		public String next() {
+			return String();
+		}
+
+		public interface SpaceCharFilter {
+			public boolean isSpaceChar(int ch);
+		}
+	}
+
+	static class OutputWriter {
+		private final PrintWriter writer;
+
+		public OutputWriter(OutputStream outputStream) {
+			writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(outputStream)));
+		}
+
+		public OutputWriter(Writer writer) {
+			this.writer = new PrintWriter(writer);
+		}
+
+		public void print(Object... objects) {
+			for (int i = 0; i < objects.length; i++) {
+				if (i != 0)
+					writer.print(' ');
+				writer.print(objects[i]);
+			}
+		}
+
+		public void printLine(Object... objects) {
+			print(objects);
+			writer.println();
+		}
+
+		public void close() {
+			writer.close();
+		}
+
+		public void flush() {
+			writer.flush();
+		}
+	}
+
+	static InputReader in = new InputReader(System.in);
+	static OutputWriter out = new OutputWriter(System.out);
+
+	public static long[] sort(long[] a2) {
+		int n = a2.length;
+		ArrayList<Long> l = new ArrayList<>();
+		for (long i : a2)
+			l.add(i);
+		Collections.sort(l);
+		for (int i = 0; i < l.size(); i++)
+			a2[i] = l.get(i);
+		return a2;
+	}
+
+	public static char[] sort(char[] a2) {
+		int n = a2.length;
+		ArrayList<Character> l = new ArrayList<>();
+		for (char i : a2)
+			l.add(i);
+		Collections.sort(l);
+		for (int i = 0; i < l.size(); i++)
+			a2[i] = l.get(i);
+		return a2;
+	}
+
+	public static long pow(long x, long y) {
+		long res = 1;
+		while (y > 0) {
+			if (y % 2 != 0) {
+				res = (res * x);// % modulus;
+				y--;
+
+			}
+			x = (x * x);// % modulus;
+			y = y / 2;
+		}
+		return res;
+	}
+
+//GCD___+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	public static long gcd(long x, long y) {
+		if (x == 0)
+			return y;
+		else
+			return gcd(y % x, x);
+	}
+	// ******LOWEST COMMON MULTIPLE
+	// *********************************************
+
+	public static long lcm(long x, long y) {
+		return (x * (y / gcd(x, y)));
+	}
+
+//INPUT PATTERN********************************************************
+	public static int i() {
+		return in.Int();
+	}
+
+	public static long l() {
+		String s = in.String();
+		return Long.parseLong(s);
+	}
+
+	public static String s() {
+		return in.String();
+	}
+
+	public static int[] readArrayi(int n) {
+		int A[] = new int[n];
+		for (int i = 0; i < n; i++) {
+			A[i] = i();
+		}
+		return A;
+	}
+
+	public static long[] readArray(long n) {
+		long A[] = new long[(int) n];
+		for (int i = 0; i < n; i++) {
+			A[i] = l();
+		}
+		return A;
+	}
+
+}

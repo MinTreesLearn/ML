@@ -1,0 +1,1 @@
+exec(int(input())*'m,y,a,b=map(int,input().split());y-=m;a+=b;print((y//a,-1)[y%a>0]);')

@@ -1,0 +1,1 @@
+for i in[*open(0)][1:]:print(max(map(len,i.replace("\n","").split("R")))+1)

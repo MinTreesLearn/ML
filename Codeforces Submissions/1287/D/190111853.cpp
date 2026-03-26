@@ -1,0 +1,195 @@
+// url: https://codeforces.com/contest/1287/problem/D
+// memory limit: 256MB
+// time limit: 1000s
+/*
+++[---------->+<]>.-[------>+<]>-.++++++++.+++++.-[->+++++<]>-.-[--->++<]>--.+.[--->+<]>---.[->+++<]>++.++++++.-------.++++++.--[--->+<]>.-[->+++<]>-..+++++++++++++.[----->++<]>.------------.+[----->+<]>.--------.+++++++++++++.-------------.--[--->+<]>-.---[->++++<]>-.++++[->+++<]>.--[--->+<]>-.[->+++<]>++.-.+++.---.-[->+++<]>.-[--->++<]>+.++++.------.[--->+<]>---.+[----->+<]>.------------.+++++++.-------.--[--->+<]>---.+++[->+++<]>++..+++++++++.---------.-[->+++<]>.+[----->+<]>+.-------------.+++++++.+.----[->+++<]>-.
+
+                                   __   __   ___  __ 
+                                  /_ | / /  / _ \/_ |
+  _ __   __ _ _ __ ___   __ _ _ __ | |/ /_ | | | || |
+ | '_ \ / _` | '_ ` _ \ / _` | '_ \| | '_ \| | | || |
+ | | | | (_| | | | | | | (_| | | | | | (_) | |_| || |
+ |_| |_|\__,_|_| |_| |_|\__,_|_| |_|_|\___/ \___/ |_|
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+template<typename F, typename S>
+ostream& operator <<(ostream& ostream, pair<F, S>& p) {
+	cout << p.first << " " << p.second;
+	return ostream;
+}
+
+template<typename T>
+ostream& operator <<(ostream& ostream, vector<T>& v) {
+	for(auto& element : v) {
+		cout << element << " ";
+	}
+	return ostream;
+}
+
+template<typename T>
+ostream& operator <<(ostream& ostream, vector<vector<T>>& v) {
+	for(auto& row : v) {
+		for(auto& cell : row) {
+			cout << cell << " ";
+		}
+		cout << "\n";
+	}
+	return ostream;
+}
+
+template<typename F, typename S>
+istream& operator >>(istream& istream, pair<F, S>& p) {
+	cin >> p.first >> p.second;
+	return istream;
+}
+
+template<typename T>
+istream& operator >>(istream& istream, vector<T>& v) {
+	for(auto& element : v) {
+		cin >> element;
+	}
+	return istream;
+}
+
+typedef long long big;
+typedef long double ludo;
+#define pbb pair<big, big>
+#define pii pair<int, int>
+#define fe first
+#define se second
+#define maxheap priority_queue
+#define mset multiset
+#define uset unordered_set
+#define umap unordered_map
+#define fr(i, s, e) for(int i = s; i < e; i++)
+#define revfr(i, s, e) for(int i = s - 1; i >= e; i--)
+#define getv(v, n) for(int i = 0; i < n; i++) cin >> v[i];
+#define speed ios_base::sync_with_stdio(false); cin.tie(NULL)
+#define nl "\n"
+
+#ifdef naman1601
+#define debug(text) cout << (#text) << ": " << text << endl;
+#else
+#define debug(text)
+#endif
+
+const big mod = 1000000007;
+// const big mod = 998244353;
+const big infinity = 1000000000000000000;
+const int inf = 1e9 + 5;
+
+
+// const int maxn = 2e5 + 5;
+int n_nodes, n_edges;
+vector<vector<int>> adj;
+vector<int> c, ans;
+vector<vector<int>> dp;
+// vector<vector<int>> rev;
+// vector<int> depth;
+// vector<int> sz;
+// vector<int> adj[maxn];
+// vector<int> rev[maxn];
+// int depth[maxn];
+// int sz[maxn];
+// vector<int> path;
+
+void graph_init() {
+	
+	adj.clear();
+	adj.resize(n_nodes);
+
+	c.assign(n_nodes, 0);
+
+	dp.clear();
+	dp.resize(n_nodes);
+
+	ans.assign(n_nodes, 0);
+	// sz.assign(n_nodes, 0);
+	// depth.assign(n_nodes, 0);
+}
+
+void dfs(int v, int p = -1) {
+
+	for(int u : adj[v]) {
+
+		if(u == p) {
+
+			continue;
+		}
+
+		dfs(u, v);
+
+		for(int&e : dp[u]) {
+
+			dp[v].push_back(e);
+		}
+
+		dp[u].clear();
+	}
+
+	if((int)dp[v].size() < c[v]) {
+
+		cout << "NO\n";
+		exit(0);
+	}
+
+	dp[v].insert(dp[v].begin() + c[v], v);
+}
+
+
+void solve() {
+
+	cin >> n_nodes;
+	n_edges = n_nodes - 1;
+
+	graph_init();
+	int r;
+
+	fr(i, 0, n_nodes) {
+
+		int u, cnt;
+		cin >> u >> cnt;
+		u--;
+
+		if(u != -1) {
+
+			adj[u].push_back(i);
+
+		} else {
+
+			r = i;
+		}
+
+		c[i] = cnt;
+	}
+
+	dfs(r);
+	int control = 1;
+
+	for(int& e : dp[r]) {
+
+		ans[e] = control++;
+	}
+
+	cout << "YES\n" << ans << nl;
+}
+
+
+int main() {
+	
+	speed;
+
+	int TC = 1;
+	// cin >> TC;
+
+	for(int tc = 1; tc <= TC; tc++) {
+
+		// cout << "Case #" << tc << ": ";
+		solve();
+	}
+
+	return 0;
+}

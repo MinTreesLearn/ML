@@ -1,0 +1,2 @@
+#include<bits/stdc++.h>
+using namespace std;int i=1,j,n,m,a[200000];main(){for(cin>>n;i<n;i++){scanf("%d",a+i);a[i]+=a[i-1];}set<int>s(a,a+n);m=*s.begin()-1;if(s.size()<n||*s.rbegin()>m+n)cout<<-1;else for(;j<n;j++)cout<<a[j]-m<<' ';}
