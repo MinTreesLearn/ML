@@ -104,13 +104,7 @@ Hệ thống có cơ chế ưu tiên tải dữ liệu:
 
 2. **Ưu tiên 2**: Quét thư mục `Codeforces Submissions/`
    - Duyệt các file `.py`, `.java`, `.cpp` trong từng contest/problem
-   - Mặc định verdict = 'AC' (vì chỉ có bài đã được chấp nhận)
-   - Giới hạn 50,000 submissions
-
-3. **Ưu tiên 3** (fallback): Tạo dữ liệu synthetic
-   - 100 users × 50 submissions/user = 5,000 records
-   - Rating ngẫu nhiên: 800 + random(-200, 2000)
-   - Verdict: AC 60%, WA 20%, TLE 10%, RE 10%
+   - tách verdict để biết các sumition là AC/WA/TL
 
 **Cột cuối cùng**: `user_id`, `user_rating`, `problem_id`, `verdict`, `timestamp`, `language`
 
